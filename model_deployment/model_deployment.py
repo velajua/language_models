@@ -19,10 +19,10 @@ def upload_file_blob(local_path, cs_path, bucket_name):
 
 
 def upload_model(model_name, today):
-    upload_file_blob(f'{FILE_PREF}{model_name}',
+    upload_file_blob(f'{model_name}',
                      f"historic/{today}_{model_name}",
                      'my_model_deployment')
-    upload_file_blob(f'{FILE_PREF}{model_name}',
+    upload_file_blob(f'{model_name}',
                      f"{model_name}",
                      'my_model_deployment')
 
