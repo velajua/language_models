@@ -1,0 +1,10 @@
+sacremoses==0.0.53
+transformers==4.26.1
+torch==1.13.1
+dill==0.3.6
+google-cloud-storage==1.43.0
+summarize_data_model
+numpy==1.21.5
+envyaml==1.10.211231
+Flask==2.2.2
+flask-restplus==0.10.1
