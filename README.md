@@ -14,7 +14,7 @@ By standardizing the input modification process, the ModelWrapper allows for eas
 
 The Model Dpeloyment proposes serialization using the Dill library, after which the serialized files are uploaded to a GCP bucket.
 
-![gcp bucket](model_deployment/loaded_models.png) "gcp bucket"
+![gcp bucket](model_deployment/loaded_models.png)
 
 ## Usage
 
@@ -49,7 +49,7 @@ and navigating to `http://localhost:8080` or `http://127.0.0.1:8080`
 
 A demo of the Model Deployment app can be found [here](https://language-models-4r64swfrtq-uc.a.run.app/)
 
-![demo_homepage](model_deployment/homepage.png) "demo_homepage"
+![demo_homepage](model_deployment/homepage.png)
 
 
 ### /predict
