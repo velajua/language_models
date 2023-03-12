@@ -94,7 +94,13 @@ def predict_proxy():
     response = requests.post(
         '/'.join(request.base_url.split('/')[:-1]) +
         '/predict', json=modified_data)
-    print(response.json())
+    try:
+        print('printing info:')
+        print(response.content)
+        print(response.headers)
+        print(response.json())
+    except:
+        pass
     return jsonify(response.json())
 
 
