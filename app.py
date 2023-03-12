@@ -149,7 +149,7 @@ def predict_proxy() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
     return response.json()
 
 
-@app.route('/predict', methods=['GET'])
+@app.route('/predict')
 def get_prediction() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
     global model
     """
