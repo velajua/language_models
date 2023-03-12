@@ -158,17 +158,18 @@ def get_prediction() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
     Returns:
         A JSON response containing the prediction or an error message.
     """
-    if request.method == 'GET':
-        print('got to prediction', file=sys.stderr)
-        data = request.get_json()
-        if data and data.get('model_name', '') not in MODELS and not data.get('data', ''):
-            return {'404': 'Request Incomplete'}
-        current_model = model[data['model_name']]
-        pred = current_model.predict(data['data'])
-        print('prediction:', pred, file=sys.stderr)
-        return jsonify({"body": pred})
-    else:
-        return {'405': 'Method Not Allowed'}
+    # if request.method == 'GET':
+    print('prediction method:', request.method, file=sys.stderr)
+    print('got to prediction', file=sys.stderr)
+    data = request.get_json()
+    if data and data.get('model_name', '') not in MODELS and not data.get('data', ''):
+        return {'404': 'Request Incomplete'}
+    current_model = model[data['model_name']]
+    pred = current_model.predict(data['data'])
+    print('prediction:', pred, file=sys.stderr)
+    return jsonify({"body": pred})
+    # else:
+    #     return {'405': 'Method Not Allowed'}
 
 
 if __name__ == '__main__' or __name__ == 'app':
