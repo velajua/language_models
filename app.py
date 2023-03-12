@@ -15,6 +15,7 @@ from flask import Flask, request, jsonify, render_template
 
 FILE_PREF = '' if "language_models" in os.getcwd() else '/tmp/'
 MODELS = EnvYAML("config.yaml")["MODELS"]
+global model
 
 class NpEncoder(json.JSONEncoder):
     """
@@ -141,6 +142,7 @@ def predict_proxy() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
 
 @app.route('/predict', methods=['GET'])
 def get_prediction() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
+    global model
     """
     Endpoint to get the prediction from the appropriate model.
 
