@@ -138,13 +138,9 @@ def predict_proxy() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
         else:
             modified_data[key] = value
     print('sending to predict:', modified_data, file=sys.stderr)
-    response = requests.request('POST',
-        (url := '/'.join(request.base_url.split('/')[:-1]) + '/predict'), json=modified_data)
-    try:
-        print('content:', response.content, file=sys.stderr)
-        print('json:', response.json, file=sys.stderr)
-    except:
-        pass
+    response = requests.request('GET',
+        '/'.join(request.base_url.split('/')[:-1] + '/predict'),
+        json=modified_data, params=modified_data)
     return jsonify(response.json())
 
 
@@ -157,15 +153,12 @@ def get_prediction() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
     Returns:
         A JSON response containing the prediction or an error message.
     """
-    print('prediction method:', request.method, file=sys.stderr)
-    print('got to prediction', file=sys.stderr)
     if request.method == 'POST':
         data = request.get_json()
     elif request.method == 'GET':
         data = request.args.to_dict()
-    else:
-        return {'405': 'Method Not Allowed'}
-    if data and data.get('model_name', '') not in MODELS and not data.get('data', ''):
+    if (data and data.get('model_name', '') not in MODELS
+            and not data.get('data', '')):
         return {'404': 'Request Incomplete'}
     current_model = model[data['model_name']]
     pred = current_model.predict(data['data'])
