@@ -62,6 +62,7 @@ def load_models():
             elif os.path.exists(FILE_PREF + model + '.dill'):
                 with open(f"{FILE_PREF}{model}.dill", "rb") as f:
                     dicto_models[model] = load(f)
+    print('models loaded:', dicto_models)
     return dicto_models
 
 
@@ -93,6 +94,7 @@ def predict_proxy():
     response = requests.post(
         '/'.join(request.base_url.split('/')[:-1]) +
         '/predict', json=modified_data)
+    print(response.json())
     return jsonify(response.json())
 
 
