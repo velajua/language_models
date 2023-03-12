@@ -51,13 +51,13 @@
     <div class="w3-content">
       <div class="w3-twothird">
         <h1>What is Model Deployment</h1>
-        <h5 class="w3-padding-32">This model deployment app allows to call various HuggingFace models, using the same methods</h5>
+        <h5 class="w3-padding-32">This model deployment app allows to call various HuggingFace models, using the same methods.</h5>
 
         <p class="w3-text-grey">Model deployment is the process of taking a trained machine learning model and making it available for use in a real-world application. This involves a variety of steps, including selecting an appropriate deployment environment, preparing the model for deployment, and creating an interface for users to interact with the model. Deploying a model is an important step in the machine learning pipeline, as it is what enables the model to be used to solve real-world problems. Effective deployment requires careful consideration of factors such as scalability, reliability, and security, and can involve the use of specialized tools and platforms to streamline the process.</p>
       </div>
 
       <div class="w3-third w3-center">
-        <img src="https://cdn.jsdelivr.net/gh/huggingface/branding/assets/hugging-face-logo-horizontal.svg" class="w3-padding-64" style="color:red;">
+        <i class="fa fa-calendar-check-o w3-padding-64 w3-text-red"></i>
       </div>
     </div>
   </div>
@@ -66,16 +66,17 @@
   <div class="w3-row-padding w3-light-grey w3-padding-64 w3-container">
     <div class="w3-content">
       <div class="w3-third w3-center">
-        <i class="fa fa-coffee w3-padding-64 w3-text-red w3-margin-right"></i>
+        <i class="fa fa-cloud-upload w3-padding-64 w3-text-red w3-margin-right"></i>
       </div>
 
       <div class="w3-twothird">
-        <h1>Lorem Ipsum</h1>
-        <h5 class="w3-padding-32">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</h5>
+        <h1>Model Standardization</h1>
+        <h5 class="w3-padding-32">Using Inheritance to standardize HuggingFace models.</h5>
 
-        <p class="w3-text-grey">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint
-          occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-          laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p class="w3-text-grey">Using inheritance in Python is a powerful tool for creating reusable code and standardizing behavior across multiple classes. In the context of deploying Hugging Face models in an application, we can use inheritance to create a ModelWrapper class that standardizes the process of preparing input data and calling the predict method of the Hugging Face model.</p>
+        <p class="w3-text-grey">The ModelWrapper class can take in the specific differences of each Hugging Face model, such as the tokenizer and model architecture, and use them to modify input data in a standardized way. For example, if one Hugging Face model requires the input to be tokenized and encoded before being passed to the model, the ModelWrapper can use the specified tokenizer to perform these actions. Similarly, if another model requires the input to be preprocessed in a specific way, the ModelWrapper can implement the necessary preprocessing steps.</p>
+        <p class="w3-text-grey">By standardizing the input modification process, the ModelWrapper allows for easy integration of new Hugging Face models into the deployment app. Additionally, by implementing a predict method that calls the predict method of the Hugging Face model, the ModelWrapper hides the specifics of each model's prediction process and allows for a consistent interface to be used in the app.</p>
+        <p class="w3-text-grey">Overall, using inheritance in Python to create a ModelWrapper class can greatly simplify the process of deploying Hugging Face models in an application by standardizing the input modification process and providing a consistent interface for making predictions.</p>
       </div>
     </div>
   </div>

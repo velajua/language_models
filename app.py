@@ -106,7 +106,7 @@ def predict_proxy():
     return jsonify(response.json())
 
 
-@app.route('/predict', methods=['POST'])
+@app.route('/predict')
 def get_prediction():
     print('request_method', request.method, file=sys.stderr)
     if request.method == 'POST':
