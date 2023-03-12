@@ -98,16 +98,19 @@ def predict_proxy():
     return response.json()
 
 
-@app.route('/predict')
+@app.route('/predict', methods=['POST'])
 def get_prediction():
-    data = request.get_json()
-    if data.get('model_name',
-                '') not in MODELS and not data.get(
-                    'data', ''):
-        return {'404': 'Request Incomplete'}
-    current_model = model[data['model_name']]
-    pred = current_model.predict(data['data'])
-    return jsonify({"body": pred})
+    if request.method == 'POST':
+        data = request.get_json()
+        if data.get('model_name',
+                    '') not in MODELS and not data.get(
+                        'data', ''):
+            return {'404': 'Request Incomplete'}
+        current_model = model[data['model_name']]
+        pred = current_model.predict(data['data'])
+        return jsonify({"body": pred})
+    else:
+        return {'405': 'Method Not Allowed'}
 
 
 if __name__ == '__main__' or __name__ == 'app':
