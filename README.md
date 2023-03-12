@@ -49,6 +49,9 @@ and navigating to `http://localhost:8080` or `http://127.0.0.1:8080`
 
 A demo of the Model Deployment app can be found [here](https://language-models-4r64swfrtq-uc.a.run.app/)
 
+![demo_homepage](model_deployment/homepage.png) "demo_homepage"
+
+
 ### /predict
 
 The server makes use of a `GET` `/predict` endpoint with a JSON payload to consolidate all the requests.
