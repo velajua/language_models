@@ -1,4 +1,7 @@
+from __future__ import print_function
+
 import os
+import sys
 import json
 import requests
 import numpy as np
@@ -80,8 +83,8 @@ def model_deployment():
 @app.route('/predict_proxy', methods=['POST'])
 def predict_proxy():
     form_data = request.form
-    print(form_data)
-    print(request.base_url)
+    print(form_data, file=sys.stderr)
+    print(request.base_url, file=sys.stderr)
     modified_data = {}
     for key, value in form_data.items():
         if key == 'model_name':
@@ -95,10 +98,10 @@ def predict_proxy():
         '/'.join(request.base_url.split('/')[:-1]) +
         '/predict', json=modified_data)
     try:
-        print('printing info:')
-        print(response.content)
-        print(response.headers)
-        print(response.json())
+        print('printing info:', file=sys.stderr)
+        print(response.content, file=sys.stderr)
+        print(response.headers, file=sys.stderr)
+        print(response.json(), file=sys.stderr)
     except:
         pass
     return jsonify(response.json())
@@ -114,7 +117,7 @@ def get_prediction():
             return '404, Request Incomplete'
         current_model = model[data['model_name']]
         pred = current_model.predict(data['data'])
-        print(f'data input: {data}, prediction: {pred}')
+        print(f'data input: {data}, prediction: {pred}', file=sys.stderr)
         return jsonify({"body": pred})
     else:
         return '405, Method not allowed'
