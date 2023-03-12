@@ -1,24 +1,35 @@
 import os
 import dill
-
 from datetime import datetime
 from google.cloud import storage
-
-from transformers import AutoModelForSeq2SeqLM
-from transformers import FSMTForConditionalGeneration, FSMTTokenizer
-from transformers import AutoTokenizer, AutoModelForTokenClassification
+from transformers import (AutoModelForSeq2SeqLM, FSMTForConditionalGeneration,
+                          FSMTTokenizer, AutoTokenizer, AutoModelForTokenClassification)
 
 FILE_PREF: str = '' if 'language_models' in os.getcwd() else '/tmp/'
-today = datetime.now().strftime('%Y_%m_%d')
+today: str = datetime.now().strftime('%Y_%m_%d')
 
 
-def upload_file_blob(local_path, cs_path, bucket_name):
+def upload_file_blob(local_path: str, cs_path: str,
+                     bucket_name: str) -> None:
+    """Uploads a file to Google Cloud Storage bucket.
+
+    Args:
+        local_path (str): Local file path to be uploaded.
+        cs_path (str): Destination path to the file in the bucket.
+        bucket_name (str): Bucket name where the file will be uploaded.
+    """
     bucket = storage.Client().bucket(bucket_name)
     blob = bucket.blob(cs_path)
     blob.upload_from_filename(local_path)
 
 
-def upload_model(model_name, today):
+def upload_model(model_name: str, today: str) -> None:
+    """Uploads a trained model to Google Cloud Storage bucket.
+
+    Args:
+        model_name (str): Name of the trained model file.
+        today (str): Date formatted as 'YYYY_MM_DD'.
+    """
     upload_file_blob(f'{model_name}',
                      f"historic/{today}_{model_name}",
                      'my_model_deployment')

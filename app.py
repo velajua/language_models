@@ -1,7 +1,4 @@
-from __future__ import print_function
-
 import os
-import sys
 import json
 import requests
 import numpy as np
@@ -10,16 +7,19 @@ from dill import load
 from envyaml import EnvYAML
 from functools import lru_cache
 
-from google.cloud import storage
+from typing import Union, Dict
 
+from google.cloud import storage
 from flask import Flask, request, jsonify, render_template
-# from model_deployment.model_deployment import deploy_models
+
 
 FILE_PREF = '' if "language_models" in os.getcwd() else '/tmp/'
 MODELS = EnvYAML("config.yaml")["MODELS"]
 
-
 class NpEncoder(json.JSONEncoder):
+    """
+    A custom encoder for serializing numpy types to json.
+    """
     def default(self, obj):
         if isinstance(obj, np.integer):
             return int(obj)
@@ -34,15 +34,32 @@ app = Flask(__name__)
 app.json_encoder = NpEncoder
 
 
-def get_blob(model_name):
+def get_blob(model_name: str) -> storage.Blob:
+    """
+    Retrieve a Google Cloud Storage blob for a given model name.
+
+    Args:
+        model_name: A string representing the name of the model.
+
+    Returns:
+        A Blob object representing the model file in GCS.
+    """
     path = f'{model_name}.dill'
-    bucket = storage.Client().get_bucket(
-        'my_model_deployment') 
+    bucket = storage.Client().get_bucket('my_model_deployment')
     blob_of_file = bucket.blob(path)
     return blob_of_file
 
 
-def get_model(model_name):
+def get_model(model_name: str) -> object:
+    """
+    Download a model file from GCS and load it into memory.
+
+    Args:
+        model_name: A string representing the name of the model.
+
+    Returns:
+        A loaded model object.
+    """
     blob = get_blob(model_name)
     blob.download_to_filename(f"{FILE_PREF}{model_name}.dill")
     with open(f"{FILE_PREF}{model_name}.dill", "rb") as f:
@@ -51,7 +68,13 @@ def get_model(model_name):
 
 
 @lru_cache(maxsize=1)
-def load_models():
+def load_models() -> Dict[str, object]:
+    """
+    Load all the models specified in the MODELS config file into memory.
+
+    Returns:
+        A dictionary containing all the loaded models.
+    """
     dicto_models = {}
     for model in MODELS:
         try:
@@ -70,18 +93,36 @@ def load_models():
 
 
 @app.route('/')
-def homepage():
+def homepage() -> requests.Response:
+    """
+    Renders the homepage template.
+
+    Returns:
+        A rendered HTML page.
+    """
     return render_template('home.html')
 
 
 @app.route('/model_deployment')
-def model_deployment():
+def model_deployment() -> str:
+    """
+    Endpoint to deploy the trained models.
+
+    Returns:
+        A '200' status code indicating the success of the operation.
+    """
     # deploy_models()
     return '200'
 
 
 @app.route('/predict_proxy', methods=['POST'])
-def predict_proxy():
+def predict_proxy() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
+    """
+    Endpoint to proxy the prediction request to the appropriate model.
+
+    Returns:
+        A JSON response containing the prediction.
+    """
     form_data = request.form
     modified_data = {}
     for key, value in form_data.items():
@@ -99,12 +140,16 @@ def predict_proxy():
 
 
 @app.route('/predict', methods=['GET'])
-def get_prediction():
-    if request.method == 'GET' and request.get_json():
+def get_prediction() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
+    """
+    Endpoint to get the prediction from the appropriate model.
+
+    Returns:
+        A JSON response containing the prediction or an error message.
+    """
+    if request.method == 'GET':
         data = request.get_json()
-        if data.get('model_name',
-                    '') not in MODELS and not data.get(
-                        'data', ''):
+        if data and data.get('model_name', '') not in MODELS and not data.get('data', ''):
             return {'404': 'Request Incomplete'}
         current_model = model[data['model_name']]
         pred = current_model.predict(data['data'])

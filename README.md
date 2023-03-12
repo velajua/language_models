@@ -45,7 +45,13 @@ and navigating to `http://localhost:8080` or `http://127.0.0.1:8080`
 
 ## Endpoint
 
-The server makes use of a `/predict` endpoint to consolidate all the requests.
+### /
+
+A demo of the Model Deployment app can be found [here](https://language-models-4r64swfrtq-uc.a.run.app/)
+
+### /predict
+
+The server makes use of a `GET` `/predict` endpoint with a JSON payload to consolidate all the requests.
 The input format is as follows:
 
 ```json
@@ -56,3 +62,8 @@ The input format is as follows:
 ```
 
 Where MODEL_NAME is any of the loaded models whcih can be found [here](config.yaml) and TEXT_DATA is the text input for the models.
+Returns
+```json
+{"405": "Method Not Allowed"}
+```
+if the request doesn't have a payload or the Method is Not Allowed.
