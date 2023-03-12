@@ -92,36 +92,25 @@ def predict_proxy():
                 'summarize_data_model')
         else:
             modified_data[key] = value
-    response = requests.request('POST',
-        '/'.join(request.base_url.split('/')[:-1]) +
-        '/predict', json=modified_data,
+    response = requests.post(
+        request.url_root + 'predict', json=modified_data,
         headers={'Content-Type': 'application/json'})
-    try:
-        print('printing info:', file=sys.stderr)
-        print(response.content, file=sys.stderr)
-        print(response.headers, file=sys.stderr)
-        print(response.json(), file=sys.stderr)
-    except:
-        pass
-    return jsonify(response.json())
+    return response.json()
 
 
-@app.route('/predict')
+@app.route('/predict', methods=['POST'])
 def get_prediction():
-    print('request_method', request.method, file=sys.stderr)
     if request.method == 'POST':
         data = request.get_json()
         if data.get('model_name',
                     '') not in MODELS and not data.get(
                         'data', ''):
-            return '404, Request Incomplete'
+            return {'404': 'Request Incomplete'}
         current_model = model[data['model_name']]
         pred = current_model.predict(data['data'])
-        print(f'data input: {data}, prediction: {pred}',
-              file=sys.stderr)
         return jsonify({"body": pred})
     else:
-        return '405, Method not allowed'
+        return {'405': 'Method not allowed'}
 
 
 if __name__ == '__main__' or __name__ == 'app':
