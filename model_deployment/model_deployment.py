@@ -8,7 +8,7 @@ from transformers import AutoModelForSeq2SeqLM
 from transformers import FSMTForConditionalGeneration, FSMTTokenizer
 from transformers import AutoTokenizer, AutoModelForTokenClassification
 
-FILE_PREF: str = '' if 'model_orchestrator' in os.getcwd() else '/tmp/'
+FILE_PREF: str = '' if 'language_models' in os.getcwd() else '/tmp/'
 today = datetime.now().strftime('%Y_%m_%d')
 
 

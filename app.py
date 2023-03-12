@@ -1,5 +1,6 @@
 import os
 import json
+import requests
 import numpy as np
 
 from dill import load
@@ -8,12 +9,10 @@ from functools import lru_cache
 
 from google.cloud import storage
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
+# from model_deployment.model_deployment import deploy_models
 
-from model_deployment.model_deployment import deploy_models
-
-
-FILE_PREF = '' if "model_orchestrator" in os.getcwd() else '/tmp/'
+FILE_PREF = '' if "language_models" in os.getcwd() else '/tmp/'
 MODELS = EnvYAML("config.yaml")["MODELS"]
 
 
@@ -27,13 +26,15 @@ class NpEncoder(json.JSONEncoder):
             return obj.tolist()
         return super(NpEncoder, self).default(obj)
 
+
 app = Flask(__name__)
 app.json_encoder = NpEncoder
 
 
 def get_blob(model_name):
     path = f'{model_name}.dill'
-    bucket = storage.Client().get_bucket('my_model_deployment')
+    bucket = storage.Client().get_bucket(
+        'my_model_deployment') 
     blob_of_file = bucket.blob(path)
     return blob_of_file
 
@@ -66,27 +67,48 @@ def load_models():
 
 @app.route('/')
 def homepage():
-    return 'Homepage for the model orchestrator'
+    return render_template('home.html')
 
 
 @app.route('/model_deployment')
 def model_deployment():
-    deploy_models()
+    # deploy_models()
     return '200'
+
+
+@app.route('/predict_proxy', methods=['POST'])
+def predict_proxy():
+    form_data = request.form
+    print(form_data)
+    print(request.base_url)
+    modified_data = {}
+    for key, value in form_data.items():
+        if key == 'model_name':
+            modified_data[key] = (
+                'entity_match_model' if value == '0' else
+                'russian_translation_model' if value == '1' else
+                'summarize_data_model')
+        else:
+            modified_data[key] = value
+    response = requests.post(
+        '/'.join(request.base_url.split('/')[:-1]) +
+        '/predict', json=modified_data)
+    return jsonify(response.json())
 
 
 @app.route('/predict', methods=['POST'])
 def get_prediction():
     if request.method == 'POST':
         data = request.get_json()
-        if data.get('model_name', '') not in MODELS and not data.get('data', ''):
+        if data.get('model_name',
+                    '') not in MODELS and not data.get(
+                        'data', ''):
             return '404, Request Incomplete'
         current_model = model[data['model_name']]
         pred = current_model.predict(data['data'])
         return jsonify({"body": pred})
     else:
         return '405, Method not allowed'
-
 
 
 if __name__ == '__main__' or __name__ == 'app':
