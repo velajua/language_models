@@ -83,8 +83,6 @@ def model_deployment():
 @app.route('/predict_proxy', methods=['POST'])
 def predict_proxy():
     form_data = request.form
-    print(form_data, file=sys.stderr)
-    print(request.base_url, file=sys.stderr)
     modified_data = {}
     for key, value in form_data.items():
         if key == 'model_name':
@@ -95,8 +93,10 @@ def predict_proxy():
         else:
             modified_data[key] = value
     response = requests.post(
-        '/'.join(request.base_url.split('/')[:-1]) +
-        '/predict', json=modified_data)
+        (url := '/'.join(request.base_url.split('/')[:-1]) +
+        '/predict'), json=modified_data,
+        headers={'Content-Type': 'application/json'})
+    print('url:', url, file=sys.stderr)
     try:
         print('printing info:', file=sys.stderr)
         print(response.content, file=sys.stderr)
