@@ -92,11 +92,10 @@ def predict_proxy():
                 'summarize_data_model')
         else:
             modified_data[key] = value
-    response = requests.post(
-        (url := '/'.join(request.base_url.split('/')[:-1]) +
-        '/predict'), json=modified_data,
+    response = requests.request('POST',
+        '/'.join(request.base_url.split('/')[:-1]) +
+        '/predict', json=modified_data,
         headers={'Content-Type': 'application/json'})
-    print('url:', url, file=sys.stderr)
     try:
         print('printing info:', file=sys.stderr)
         print(response.content, file=sys.stderr)
@@ -109,6 +108,7 @@ def predict_proxy():
 
 @app.route('/predict', methods=['POST'])
 def get_prediction():
+    print('request_method', request.method, file=sys.stderr)
     if request.method == 'POST':
         data = request.get_json()
         if data.get('model_name',
@@ -117,7 +117,8 @@ def get_prediction():
             return '404, Request Incomplete'
         current_model = model[data['model_name']]
         pred = current_model.predict(data['data'])
-        print(f'data input: {data}, prediction: {pred}', file=sys.stderr)
+        print(f'data input: {data}, prediction: {pred}',
+              file=sys.stderr)
         return jsonify({"body": pred})
     else:
         return '405, Method not allowed'
