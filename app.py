@@ -93,7 +93,7 @@ def predict_proxy():
         else:
             modified_data[key] = value
     response = requests.post(
-        request.url_root + 'predict', json=modified_data,
+        request.url_root + '/predict', json=modified_data,
         headers={'Content-Type': 'application/json'})
     return response.json()
 

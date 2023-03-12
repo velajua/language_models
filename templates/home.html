@@ -71,7 +71,7 @@
 
       <div class="w3-twothird">
         <h1>Model Standardization</h1>
-        <h5 class="w3-padding-32">Using Inheritance to standardize HuggingFace models.</h5>
+        <h5 class="w3-padding-32">Using Inheritance to Standardize HuggingFace Models.</h5>
 
         <p class="w3-text-grey">Using inheritance in Python is a powerful tool for creating reusable code and standardizing behavior across multiple classes. In the context of deploying Hugging Face models in an application, we can use inheritance to create a ModelWrapper class that standardizes the process of preparing input data and calling the predict method of the Hugging Face model.</p>
         <p class="w3-text-grey">The ModelWrapper class can take in the specific differences of each Hugging Face model, such as the tokenizer and model architecture, and use them to modify input data in a standardized way. For example, if one Hugging Face model requires the input to be tokenized and encoded before being passed to the model, the ModelWrapper can use the specified tokenizer to perform these actions. Similarly, if another model requires the input to be preprocessed in a specific way, the ModelWrapper can implement the necessary preprocessing steps.</p>
