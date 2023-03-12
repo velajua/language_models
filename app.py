@@ -133,7 +133,7 @@ def predict_proxy() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
                 'summarize_data_model')
         else:
             modified_data[key] = value
-    response = requests.post(
+    response = requests.get(
         request.url_root + '/predict', json=modified_data,
         headers={'Content-Type': 'application/json'})
     return response.json()
