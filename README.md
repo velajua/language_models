@@ -12,7 +12,7 @@ The ModelWrapper class can take in the specific differences of each Hugging Face
 
 By standardizing the input modification process, the ModelWrapper allows for easy integration of new Hugging Face models into the deployment app. Additionally, by implementing a predict method that calls the predict method of the Hugging Face model, the ModelWrapper hides the specifics of each model's prediction process and allows for a consistent interface to be used in the app.
 
-The Model Dpeloyment proposes serialization using the Dill library, after which the serialized files are uploaded to a GCP bucket.
+The Model Deployment proposes serialization using the Dill library, after which the serialized files are uploaded to a GCP bucket.
 
 ![gcp bucket](model_deployment/loaded_models.png)
 
