@@ -138,10 +138,23 @@ def predict_proxy() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
         else:
             modified_data[key] = value
     print('sending to predict:', modified_data, file=sys.stderr)
-    response = requests.get(
-        '/'.join(request.base_url.split('/')[:-1]) + '/predict', json=modified_data,
-        # 'https://language-models-4r64swfrtq-uc.a.run.app/predict', json=modified_data,
-        headers={'Content-Type': 'application/json'})
+    response = requests.request('GET',
+        (url := 'https://language-models-4r64swfrtq-uc.a.run.app/predict'), json=modified_data)
+    print('url:', url, file=sys.stderr)
+    try:
+        print('content:', response.content, file=sys.stderr)
+        print('json:', response.json, file=sys.stderr)
+    except:
+        pass
+    response = requests.request('GET',
+        (url := '/'.join(request.base_url.split('/')[:-1]) + '/predict'), json=modified_data)
+    try:
+        print('content:', response.content, file=sys.stderr)
+        print('json:', response.json, file=sys.stderr)
+    except:
+        pass
+    response = requests.request('GET',
+        (url := '/predict'), json=modified_data)
     try:
         print('content:', response.content, file=sys.stderr)
         print('json:', response.json, file=sys.stderr)
@@ -150,7 +163,7 @@ def predict_proxy() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
     return jsonify(response.json())
 
 
-@app.route('/predict', methods=['GET'])
+@app.route('/predict')
 def get_prediction() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
     global model
     """
