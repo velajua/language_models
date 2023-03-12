@@ -138,23 +138,8 @@ def predict_proxy() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
         else:
             modified_data[key] = value
     print('sending to predict:', modified_data, file=sys.stderr)
-    response = requests.request('GET',
-        (url := 'https://language-models-4r64swfrtq-uc.a.run.app/predict'), json=modified_data)
-    print('url:', url, file=sys.stderr)
-    try:
-        print('content:', response.content, file=sys.stderr)
-        print('json:', response.json, file=sys.stderr)
-    except:
-        pass
-    response = requests.request('GET',
+    response = requests.request('POST',
         (url := '/'.join(request.base_url.split('/')[:-1]) + '/predict'), json=modified_data)
-    try:
-        print('content:', response.content, file=sys.stderr)
-        print('json:', response.json, file=sys.stderr)
-    except:
-        pass
-    response = requests.request('GET',
-        (url := '/predict'), json=modified_data)
     try:
         print('content:', response.content, file=sys.stderr)
         print('json:', response.json, file=sys.stderr)
@@ -163,7 +148,7 @@ def predict_proxy() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
     return jsonify(response.json())
 
 
-@app.route('/predict')
+@app.route('/predict', methods=['GET', 'POST'])
 def get_prediction() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
     global model
     """
@@ -172,18 +157,20 @@ def get_prediction() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
     Returns:
         A JSON response containing the prediction or an error message.
     """
-    # if request.method == 'GET':
     print('prediction method:', request.method, file=sys.stderr)
     print('got to prediction', file=sys.stderr)
-    data = request.get_json()
+    if request.method == 'POST':
+        data = request.get_json()
+    elif request.method == 'GET':
+        data = request.args.to_dict()
+    else:
+        return {'405': 'Method Not Allowed'}
     if data and data.get('model_name', '') not in MODELS and not data.get('data', ''):
         return {'404': 'Request Incomplete'}
     current_model = model[data['model_name']]
     pred = current_model.predict(data['data'])
     print('prediction:', pred, file=sys.stderr)
     return jsonify({"body": pred})
-    # else:
-    #     return {'405': 'Method Not Allowed'}
 
 
 if __name__ == '__main__' or __name__ == 'app':
