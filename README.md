@@ -14,13 +14,45 @@ By standardizing the input modification process, the ModelWrapper allows for eas
 
 The Model Dpeloyment proposes serialization using the Dill library, after which the serialized files are uploaded to a GCP bucket.
 
-![gcp bucket](model_deployment/loaded_models.png) "gcp bucket")
+![gcp bucket](model_deployment/loaded_models.png) "gcp bucket"
 
 ## Usage
 
+The Model Deployment app creates a Flask server to evaluate the models as well as provide a single endpoint which can make use of the models loaded.
+
 ### Local
 
+Install the requirements using:
 
+```python
+pip install -r requirements.txt
+```
+
+The Flask server can be accessed by running:
+
+```python
+python app.py
+```
+
+and navigating to `http://localhost:8080` or `http://127.0.0.1:8080`
 
 ### Docker
 
+1. Clone this repository.
+2. Build the container using the following command: docker build -t language_models ..
+3. Run the container using the following command: docker run -it -p 8080:8080 language_models.
+4. Navigate to http://localhost:8080 in your web browser.
+
+## Endpoint
+
+The server makes use of a `/predict` endpoint to consolidate all the requests.
+The input format is as follows:
+
+```json
+{
+    "model_name": MODEL_NAME,
+    "data": TEXT_DATA
+}
+```
+
+Where MODEL_NAME is any of the loaded models whcih can be found [here](config.yaml) and TEXT_DATA is the text input for the models.

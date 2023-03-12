@@ -98,9 +98,9 @@ def predict_proxy():
     return response.json()
 
 
-@app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['GET'])
 def get_prediction():
-    if request.method == 'POST':
+    if request.method == 'GET' and request.get_json():
         data = request.get_json()
         if data.get('model_name',
                     '') not in MODELS and not data.get(
