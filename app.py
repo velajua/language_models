@@ -114,6 +114,7 @@ def get_prediction():
             return '404, Request Incomplete'
         current_model = model[data['model_name']]
         pred = current_model.predict(data['data'])
+        print(f'data input: {data}, prediction: {pred}')
         return jsonify({"body": pred})
     else:
         return '405, Method not allowed'
