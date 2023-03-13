@@ -138,8 +138,8 @@ def predict_proxy() -> Union[Dict[str, Union[str, int]], Dict[str, str]]:
         else:
             modified_data[key] = value
     print('sending to predict:', modified_data, file=sys.stderr)
-    response = requests.request('GET',
-        '/'.join(request.base_url.split('/')[:-1] + '/predict'),
+    response = requests.request('POST',
+        '/'.join(request.base_url.split('/')[:-1]) + '/predict',
         json=modified_data, params=modified_data)
     return jsonify(response.json())
 
