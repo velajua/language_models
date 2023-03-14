@@ -15,6 +15,7 @@ from typing import Union, Dict
 from google.cloud import storage
 from flask import Flask, request, jsonify, render_template
 
+# from model_deployment.model_deployment import deploy_models
 
 FILE_PREF = '' if "language_models" in os.getcwd() else '/tmp/'
 MODELS = EnvYAML("config.yaml")["MODELS"]
@@ -115,7 +116,9 @@ def model_deployment() -> str:
     Returns:
         A '200' status code indicating the success of the operation.
     """
+    global model
     # deploy_models()
+    # model = load_models()
     return '200'
 
 
